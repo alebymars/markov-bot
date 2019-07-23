@@ -24,7 +24,7 @@ def admin_required(func):
         if username in username_admins + settings.ADMIN_USERNAMES:
             return func(message, *args, **kwargs)
         else:
-            bot.reply_to(message, 'u r not an admin 🤔')
+            bot.reply_to(message, 'ты не админ 🤔')
     return wrapper_admin_required
 
 
@@ -35,9 +35,9 @@ def confirmation_required(func):
             markup = telebot.types.ReplyKeyboardMarkup(
                 row_width=1, one_time_keyboard=True, selective=True
             )
-            markup.add('yes', 'no')
+            markup.add('Да', 'Нет')
             reply = bot.reply_to(
-                message, 'are you sure?',
+                message, 'уверены ли вы?',
                 reply_markup=markup
             )
             logger.info(f'sending confirmation keyboard to {func.__name__}')
@@ -45,20 +45,20 @@ def confirmation_required(func):
             bot.register_next_step_handler(reply, callback)
             return
 
-        elif message.text == 'yes':
+        elif message.text == 'Да':
             logger.info(f'received positive confirmation for {func.__name__}')
             func(message, *args, **kwargs)
 
         logger.info('removing keyboard')
         markup = telebot.types.ReplyKeyboardRemove()
-        bot.reply_to(message, 'okay', reply_markup=markup)
+        bot.reply_to(message, 'Отлично', reply_markup=markup)
 
     return wrapper_confirmation_required
 
 
 @bot.message_handler(commands=[settings.SENTENCE_COMMAND])
 def generate_sentence(message, reply=False):
-    logger.info(f'sentence cmd called by chat {message.chat.id}')
+    logger.info(f'предложение CMD вызывается в чате {message.chat.id}')
     generated_message = speech.new_message(message.chat)
     if reply:
         bot.reply_to(message, generated_message)
@@ -70,13 +70,13 @@ def generate_sentence(message, reply=False):
 @admin_required
 @confirmation_required
 def remove_messages(message):
-    logger.info(f'remove cmd called by chat {message.chat.id}')
+    logger.info(f'удалить cmd вызывается в чате {message.chat.id}')
     speech.delete_model(message.chat)
 
 
 @bot.message_handler(commands=[settings.VERSION_COMMAND])
 def get_repo_version(message):
-    logger.info(f'version cmd called by chat {message.chat.id}')
+    logger.info(f'версия cmd вызывается из чата {message.chat.id}')
     hash_len = 7
     commit_hash = settings.COMMIT_HASH[:hash_len]
     bot.reply_to(message, commit_hash)
@@ -86,13 +86,13 @@ def get_repo_version(message):
 @admin_required
 @confirmation_required
 def flush_cache(message):
-    logger.info(f'flush cmd called by chat {message.chat.id}')
+    logger.info(f'flush cmd вызывается в чате {message.chat.id}')
     speech.flush()
 
 
 @bot.message_handler(commands=[settings.HELP_COMMAND])
 def help(message):
-    logger.info(f'help cmd called by chat {message.chat.id}')
+    logger.info(f'помощь cmd вызывается в чате {message.chat.id}')
     username = bot.get_me().username
     sentence_command = settings.SENTENCE_COMMAND
     remove_command = settings.REMOVE_COMMAND
@@ -104,12 +104,12 @@ def help(message):
     help_text = (
         "Welcome to MarkovBot, a Telegram bot that writes like you do using "
         "Markov chains!\n\n"
-        "{sentence_command}: {username} will generate a message.\n"
-        "{remove_command}: {username} will remove messages from chat.\n"
-        "{version_command}: {username} will state its current version.\n"
-        "{flush_command}: {username} will clear its cache.\n"
-        "{start_command}: {username} will display quickstart info.\n"
-        "{help_command}: {username} will print this help message!"
+        "{sentence_command}: {username} генерирует сообщение.\n"
+        "{remove_command}: {username} удалит сообщения из чата.\n"
+        "{version_command}: {username} текущая версия.\n"
+        "{flush_command}: {username} почистить кэш.\n"
+        "{start_command}: {username} отобразить информацию.\n"
+        "{help_command}: {username} помощь!"
     )
     output_text = help_text.format(
         username=username, sentence_command=sentence_command,
@@ -122,11 +122,9 @@ def help(message):
 
 @bot.message_handler(commands=[settings.START_COMMAND])
 def start(message):
-    bot.reply_to(message, f"Welcome to MarkovBot, a Telegram bot that writes "
-                          f"like you do by using Markov chains. Whenever you "
-                          f"want to get a message from your stored Markov "
-                          f"chains, run /{settings.SENTENCE_COMMAND} or "
-                          f"mention the bot. For more information, use "
+    bot.reply_to(message, f"Добро пожаловать в DeniskaBot, бот Telegram, который пишет "
+                          f"интересные штуки, запустить /{settings.SENTENCE_COMMAND} "
+                          f"Для получения дополнительной информации используйте "
                           f"/{settings.HELP_COMMAND}.")
 
 
@@ -148,5 +146,5 @@ def notify_admin(message):
 
 
 if __name__ == '__main__':
-    notify_admin('starting the bot')
+    notify_admin('бот стартанул')
     bot.polling(none_stop=True)
