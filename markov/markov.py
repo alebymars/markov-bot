@@ -102,14 +102,13 @@ def help(message):
     help_command = settings.HELP_COMMAND
 
     help_text = (
-        "Welcome to MarkovBot, a Telegram bot that writes like you do using "
-        "Markov chains!\n\n"
-        "{sentence_command}: {username} генерирует сообщение.\n"
-        "{remove_command}: {username} удалит сообщения из чата.\n"
-        "{version_command}: {username} текущая версия.\n"
-        "{flush_command}: {username} почистить кэш.\n"
-        "{start_command}: {username} отобразить информацию.\n"
-        "{help_command}: {username} помощь!"
+        "Добро пожаловать в DeniskaBot, бот Telegram, который пишет "
+        "рандомный текст, сделан на Markov chains!\n\n"
+        "/{sentence_command}: {username} сгенерировать сообщение.\n"
+        "/{remove_command}: {username} удалить сообщения из чата.\n"
+        "/{version_command}: {username} текущая версия.\n"
+        "/{flush_command}: {username} почистить кэш.\n"
+        "/{help_command}: {username} помощь!"
     )
     output_text = help_text.format(
         username=username, sentence_command=sentence_command,
