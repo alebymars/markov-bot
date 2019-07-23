@@ -146,4 +146,4 @@ def new_message(chat):
             tries=settings.TRIES
         )
 
-    return message or 'i need more data'
+    return message or 'Мне нужно больше данных, помощь /help'
