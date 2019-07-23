@@ -1,10 +1,10 @@
-<a href="https://heroku.com/deploy?template=https://github.com/alebymars/markov-bot"><br><br>
+<a href="https://heroku.com/deploy?template=https://github.com/alebymars/markov-bot">A</a><br><br>
 <hr>
 
 ### Running locally
 #### 1. Download
 ```bash
-$ git clone https://github.com/joaorafaelm/markov-bot
+$ git clone https://github.com/alebymars/markov-bot.git
 $ cd markov-bot
 ```
 #### 2. Requirements
